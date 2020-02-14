@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Board from '../Board/';
 import { AppConst } from '../../constants/';
 
 class Game extends Component {
@@ -12,6 +13,7 @@ class Game extends Component {
     render = () => {
         return (<div className="game">
             <h4>{AppConst.PLAYER} {this.state.activePlayer}</h4>
+            <Board />
         </div>);
     }
 }
