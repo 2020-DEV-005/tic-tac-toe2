@@ -33,8 +33,8 @@ class Board extends Component {
         this.setState(() => ({
             filledBoxes: filledBoxes
         }));
-        this.isGameFinished();
-        this.props.changeActivePlayer();    
+        const isGameOver = this.isGameFinished();
+        !isGameOver && this.props.changeActivePlayer();    
     }
 
     isBoxDisabled = (boxIndex) => {
@@ -47,7 +47,9 @@ class Board extends Component {
                 isGameOver: true
             }));
             this.props.setTheWinner();
+            return true;
         }
+        return false;
     }
 
     isAnyRowCompletedByTheActivePlayer = () => {
