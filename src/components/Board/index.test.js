@@ -1,13 +1,17 @@
 import React from 'react';
 import { mount } from 'enzyme';
+import checkPropTypes from 'check-prop-types';
 import Board from '../Board/';
 import { AppConst } from '../../constants/';
-
 
 describe("<Board /> component", () => {
     let wrapper, instance;
     beforeEach(() => {
-        wrapper = mount(<Board />);
+        const props = {
+            activePlayer: AppConst.PLAYER_X_NAME
+        };
+
+        wrapper = mount(<Board {...props}/>);
         instance = wrapper.instance();
     });
 
@@ -40,6 +44,30 @@ describe("<Board /> component", () => {
         btn.simulate("click");
 
         expect(btn.text()).toEqual(AppConst.PLAYER_X_NAME);
+    });
+
+    it("Should update the filled box with active player", () => {
+        const btn = wrapper.find("ul li button").at(4);
+
+        btn.simulate("click");
+
+        expect(wrapper.state().filledBoxes[4]).toEqual(wrapper.props().activePlayer);
+    });
+
+    it("Should throw error message if there is no activePlayer prop ", () => {
+        const errorMsg = "Failed prop type: The prop `activePlayer` is marked as required in `<<anonymous>>`, but its value is `undefined`."
+
+        const result = checkPropTypes(Board.propTypes, { activePlayer: undefined }, "prop", Board.activePlayer);
+
+        expect(result).toEqual(errorMsg);
+    });
+
+    it("Should throw error message if activePlayer prop type is not string ", () => {
+        const errorMsg = "Failed prop type: Invalid prop `activePlayer` of type `number` supplied to `<<anonymous>>`, expected `string`."
+
+        const result = checkPropTypes(Board.propTypes, { activePlayer: 12 }, "prop", Board.activePlayer);
+
+        expect(result).toEqual(errorMsg);
     });
 
 });

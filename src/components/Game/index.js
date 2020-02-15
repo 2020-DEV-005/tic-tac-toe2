@@ -13,7 +13,7 @@ class Game extends Component {
     render = () => {
         return (<div className="game">
             <h4>{AppConst.PLAYER} {this.state.activePlayer}</h4>
-            <Board />
+            <Board activePlayer={this.state.activePlayer}/>
         </div>);
     }
 }
