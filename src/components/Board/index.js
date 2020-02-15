@@ -10,6 +10,7 @@ class Board extends Component {
         this.state = {
             filledBoxes: []
         };
+        this.filledBoxesCount = 0;
     }
 
     _getBoxes = () => {
@@ -30,6 +31,7 @@ class Board extends Component {
     fillTheBox = (boxIndex) => {
         let filledBoxes = this.state.filledBoxes;
         filledBoxes[boxIndex] = this.props.activePlayer;
+        this.filledBoxesCount++;
         this.setState(() => ({
             filledBoxes: filledBoxes
         }));
@@ -42,18 +44,23 @@ class Board extends Component {
     }
 
     isGameFinished = () => {
+        let isGameOver = false;
         if( this.isAnyRowCompletedByTheActivePlayer() ||
             this.isAnyColumnCompletedByTheActivePlayer() ||
             this.isAnyDiagonalCompletedByTheActivePlayer()
         ) {
-
-            this.setState(() => ({
-                isGameOver: true
-            }));
+            isGameOver = true;
             this.props.setTheWinner();
-            return true;
+        } else if(this.isGameDrawn()) {
+            isGameOver = true;
+            this.props.gameDrawn();
         }
-        return false;
+
+        this.setState(() => ({
+            isGameOver: isGameOver
+        }));
+
+        return isGameOver;
     }
 
     isAnyRowCompletedByTheActivePlayer = () => {
@@ -117,6 +124,10 @@ class Board extends Component {
         return (filledBoxes[diagonalList[index][0]] === activePlayer && 
             filledBoxes[diagonalList[index][1]] === activePlayer && 
             filledBoxes[diagonalList[index][2]] === activePlayer);
+    }
+
+    isGameDrawn = () => {
+        return this.filledBoxesCount === AppConst.TOTAL_BOXES;
     }
 
     render = () => {

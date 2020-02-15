@@ -7,7 +7,8 @@ class Game extends Component {
         super(props);
         this.state = {
             activePlayer: AppConst.PLAYER_X_NAME,
-            winner: null
+            winner: null,
+            isGameOver: false
         }
     }
 
@@ -21,8 +22,23 @@ class Game extends Component {
     setTheWinner = () => {
         const activePlayer = this.state.activePlayer;
         this.setState({
-            winner: activePlayer
+            winner: activePlayer,
+            isGameOver: true
         });
+    }
+
+    gameDrawn = () => {
+        this.setState({
+            isGameOver: true
+        });
+    }
+
+    showGameOverMessage = () => {
+        return this.state.winner ? 
+            (<p className="win-msg">{AppConst.PLAYER} {this.state.winner} {AppConst.WIN_THE_GAME}</p>)
+            :
+            (<p className="game-drawn-msg">{AppConst.GAME_DRAWN}</p>);
+            
     }
 
     render = () => {
@@ -31,9 +47,10 @@ class Game extends Component {
             
             <Board activePlayer={this.state.activePlayer} 
                 changeActivePlayer={this.changeActivePlayer} 
-                setTheWinner={this.setTheWinner}/>
+                setTheWinner={this.setTheWinner}
+                gameDrawn={this.gameDrawn}/>
             
-            {this.state.winner && <p className="win-msg">{AppConst.PLAYER} {this.state.winner} {AppConst.WIN_THE_GAME}</p>}
+            {this.state.isGameOver && this.showGameOverMessage()}
         </div>);
     }
 }
