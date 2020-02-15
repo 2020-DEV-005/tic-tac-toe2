@@ -250,4 +250,44 @@ describe("<Board /> component", () => {
         expect(wrapper.props().setTheWinner).toHaveBeenCalled();
     });
 
+    it("Should call isAnyDiagonalCompletedByTheActivePlayer", () => {
+        const spy = jest.spyOn(instance, "isAnyDiagonalCompletedByTheActivePlayer");
+        instance.forceUpdate();
+
+        const btn = wrapper.find("ul li button").at(0);
+
+        btn.simulate("click");
+
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should call isDiagonalCompletedByTheActivePlayer 2 times", () => {
+        const spy = jest.spyOn(instance, "isDiagonalCompletedByTheActivePlayer");
+        instance.forceUpdate();
+
+        const btn = wrapper.find("ul li button").at(0);
+
+        btn.simulate("click");
+
+        expect(spy).toHaveBeenCalledTimes(AppConst.TOTAL_DIAGONALS);
+    });
+
+    it("Player wins if fills all the boxes diagonally", () => {
+        const btnList = wrapper.find("ul li button");
+        const box0 = btnList.at(0);
+        const box1 = btnList.at(1);
+        const box4 = btnList.at(4);
+        const box5 = btnList.at(5);
+        const box8 = btnList.at(8);
+    
+        box0.simulate("click");
+        box1.simulate("click");
+        box4.simulate("click");
+        box5.simulate("click");
+        box8.simulate("click");
+    
+        expect(wrapper.state().isGameOver).toBeTruthy();
+        expect(wrapper.props().setTheWinner).toHaveBeenCalled();
+    });
+
 });
