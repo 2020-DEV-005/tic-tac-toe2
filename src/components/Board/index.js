@@ -31,6 +31,7 @@ class Board extends Component {
         this.setState(() => ({
             filledBoxes: filledBoxes
         }));
+        this.props.changeActivePlayer();
     }
 
     render = () => {
@@ -41,7 +42,8 @@ class Board extends Component {
 }
 
 Board.propTypes = {
-    activePlayer: PropTypes.string.isRequired
+    activePlayer: PropTypes.string.isRequired,
+    changeActivePlayer: PropTypes.func.isRequired
 };
 
 export default Board;

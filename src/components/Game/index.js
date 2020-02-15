@@ -10,10 +10,17 @@ class Game extends Component {
         }
     }
 
+    changeActivePlayer = () => {
+        const activePlayer = (this.state.activePlayer === AppConst.PLAYER_X_NAME) ? AppConst.PLAYER_O_NAME : AppConst.PLAYER_X_NAME;
+        this.setState({
+            activePlayer: activePlayer
+        });
+    }
+
     render = () => {
         return (<div className="game">
             <h4>{AppConst.PLAYER} {this.state.activePlayer}</h4>
-            <Board activePlayer={this.state.activePlayer}/>
+            <Board activePlayer={this.state.activePlayer} changeActivePlayer={this.changeActivePlayer} />
         </div>);
     }
 }
