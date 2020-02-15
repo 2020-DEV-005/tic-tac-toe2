@@ -5,6 +5,8 @@ export const AppConst = {
     PLAYER: "Player",
     TOTAL_BOXES: 9,
     TOTAL_ROWS: 3,
+    TOTAL_COLUMNS: 3,
     ROW_START_INDEXES: [0,3,6],
+    COLUMN_START_INDEXES: [0,1,2],
     WIN_THE_GAME: "win the game"
 }

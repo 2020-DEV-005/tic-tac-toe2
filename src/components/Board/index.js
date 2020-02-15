@@ -42,7 +42,10 @@ class Board extends Component {
     }
 
     isGameFinished = () => {
-        if( this.isAnyRowCompletedByTheActivePlayer()) {
+        if( this.isAnyRowCompletedByTheActivePlayer() ||
+            this.isAnyColumnCompletedByTheActivePlayer() 
+        ) {
+
             this.setState(() => ({
                 isGameOver: true
             }));
@@ -72,6 +75,28 @@ class Board extends Component {
         return filledBoxes[rowStartIndex] === activePlayer && filledBoxes[rowStartIndex+1] === activePlayer && filledBoxes[rowStartIndex+2] === activePlayer;
     }
     
+    isAnyColumnCompletedByTheActivePlayer = () => {
+        let colsList = AppConst.COLUMN_START_INDEXES;
+        let numOfCols = AppConst.TOTAL_COLUMNS;
+        let isPlayerWin = false;
+        for(var column = 0; column < numOfCols; column++) {
+            let colStartIndex = colsList[column];
+            if(this.isColumnCompletedByTheActivePlayer(colStartIndex, numOfCols)) { 
+                isPlayerWin = true;
+                break;
+            } 
+        }
+        return isPlayerWin;
+    }
+
+    isColumnCompletedByTheActivePlayer = (colStartIndex, numOfCols) => {
+        let filledBoxes = this.state.filledBoxes;
+        let activePlayer = this.props.activePlayer;
+        return (filledBoxes[colStartIndex] === activePlayer && 
+            filledBoxes[colStartIndex + numOfCols] === activePlayer && 
+            filledBoxes[colStartIndex + (2 * numOfCols)] === activePlayer);
+    }
+
     render = () => {
         return (<ul className="board">
             {this._getBoxes()}
