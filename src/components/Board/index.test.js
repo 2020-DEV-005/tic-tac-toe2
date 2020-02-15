@@ -2,6 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import checkPropTypes from 'check-prop-types';
 import Board from '../Board/';
+import Box from '../Box/';
 import { AppConst } from '../../constants/';
 
 describe("<Board /> component", () => {
@@ -13,6 +14,31 @@ describe("<Board /> component", () => {
             activePlayer: activePlayer
         });
     };
+
+    const completeRowByThePlayer = () => {
+        const btnList = wrapper.find("ul li button");
+        const box1 = btnList.at(1);
+        const box2 = btnList.at(2);
+        const box3 = btnList.at(3);
+        const box4 = btnList.at(4);
+        const box5 = btnList.at(5);
+    
+        box3.simulate("click");
+        expect(wrapper.state().filledBoxes[3]).toEqual(AppConst.PLAYER_X_NAME);
+    
+        box1.simulate("click");    
+        expect(wrapper.state().filledBoxes[1]).toEqual(AppConst.PLAYER_O_NAME);
+    
+        box4.simulate("click");
+        expect(wrapper.state().filledBoxes[4]).toEqual(AppConst.PLAYER_X_NAME);
+    
+        box2.simulate("click");
+        expect(wrapper.state().filledBoxes[2]).toEqual(AppConst.PLAYER_O_NAME);
+    
+        box5.simulate("click");
+        expect(wrapper.state().filledBoxes[5]).toEqual(AppConst.PLAYER_X_NAME);
+        
+    }
 
     beforeEach(() => {
         const props = {
@@ -150,29 +176,19 @@ describe("<Board /> component", () => {
     });
 
     it("Should call the setTheWinner method when a row completed by the player", () => {
-        const btnList = wrapper.find("ul li button");
-        const box1 = btnList.at(1);
-        const box2 = btnList.at(2);
-        const box3 = btnList.at(3);
-        const box4 = btnList.at(4);
-        const box5 = btnList.at(5);
-    
-        box3.simulate("click");
-        expect(wrapper.state().filledBoxes[3]).toEqual(AppConst.PLAYER_X_NAME);
-    
-        box1.simulate("click");    
-        expect(wrapper.state().filledBoxes[1]).toEqual(AppConst.PLAYER_O_NAME);
-    
-        box4.simulate("click");
-        expect(wrapper.state().filledBoxes[4]).toEqual(AppConst.PLAYER_X_NAME);
-    
-        box2.simulate("click");
-        expect(wrapper.state().filledBoxes[2]).toEqual(AppConst.PLAYER_O_NAME);
-    
-        box5.simulate("click");
-        expect(wrapper.state().filledBoxes[5]).toEqual(AppConst.PLAYER_X_NAME);
+        completeRowByThePlayer();
     
         expect(wrapper.props().setTheWinner).toHaveBeenCalled();
+    });
+
+    it("Should disable all the boxes if game is over", () => {
+        completeRowByThePlayer();
+        
+        const boxList = wrapper.find(Box);
+
+        boxList.forEach(box => {
+            expect(box.props().disabled).toBeTruthy();
+        });
     });
 
 });

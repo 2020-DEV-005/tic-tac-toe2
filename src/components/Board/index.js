@@ -38,11 +38,14 @@ class Board extends Component {
     }
 
     isBoxDisabled = (boxIndex) => {
-        return this.state.filledBoxes[boxIndex] ? true : false;
+        return this.state.filledBoxes[boxIndex] || this.state.isGameOver ? true : false;
     }
 
     isGameFinished = () => {
         if( this.isAnyRowCompletedByTheActivePlayer()) {
+            this.setState(() => ({
+                isGameOver: true
+            }));
             this.props.setTheWinner();
         }
     }
