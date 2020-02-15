@@ -16,7 +16,7 @@ class Board extends Component {
         const totalBoxes = AppConst.TOTAL_BOXES;
         let boxList = []
         for (let i = 0; i < totalBoxes; i++) {
-            boxList.push(<li key={i}><Box onClick={this.fillTheBox.bind(this, i)} value={this.getFilledValue(i)} /></li>);
+            boxList.push(<li key={i}><Box onClick={this.fillTheBox.bind(this, i)} value={this.getFilledValue(i)} disabled={this.isBoxDisabled(i)}/></li>);
         }
         return boxList;
     }
@@ -31,9 +31,13 @@ class Board extends Component {
         this.setState(() => ({
             filledBoxes: filledBoxes
         }));
-        this.props.changeActivePlayer();
+        this.props.changeActivePlayer();    
     }
 
+    isBoxDisabled = (boxIndex) => {
+        return this.state.filledBoxes[boxIndex] ? true : false;
+    }
+    
     render = () => {
         return (<ul className="board">
             {this._getBoxes()}

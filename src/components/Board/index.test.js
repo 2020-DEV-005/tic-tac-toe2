@@ -117,4 +117,12 @@ describe("<Board /> component", () => {
         
         expect(wrapper.state().filledBoxes[2]).toEqual(AppConst.PLAYER_O_NAME);
     });
+
+    it("Box can be filled only once", () => {
+        const btn = wrapper.find("ul li button").at(0);
+    
+        btn.simulate("click");
+    
+        expect(btn.is('[disabled]')).toBe(true);
+      });
 });

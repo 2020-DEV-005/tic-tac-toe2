@@ -6,7 +6,7 @@ import checkPropTypes from 'check-prop-types';
 describe("<Box /> component", () => {
     let wrapper;
     beforeEach(() => {
-        wrapper = shallow(<Box onClick={jest.fn()} />);
+        wrapper = shallow(<Box onClick={jest.fn()} disabled={false}/>);
     });
 
     it("Should have button element", () => {
@@ -33,6 +33,23 @@ describe("<Box /> component", () => {
         const errorMsg = "Failed prop type: Invalid prop `value` of type `number` supplied to `<<anonymous>>`, expected `string`."
 
         const result = checkPropTypes(Box.propTypes, { onClick: jest.fn(), value: 1 }, "prop", Box.value);
+
+        expect(result).toEqual(errorMsg);
+    });
+
+    
+    it("Should have the disabled prop", () => {
+        const errorMsg = "Failed prop type: The prop `disabled` is marked as required in `<<anonymous>>`, but its value is `undefined`."
+
+        const result = checkPropTypes(Box.propTypes, { onClick: jest.fn(), disabled: undefined }, "prop", Box.disabled);
+
+        expect(result).toEqual(errorMsg);
+    });
+    
+    it("Should have the disabled prop of type boolean", () => {
+        const errorMsg = "Failed prop type: Invalid prop `disabled` of type `string` supplied to `<<anonymous>>`, expected `boolean`."
+
+        const result = checkPropTypes(Box.propTypes, { onClick: jest.fn(), disabled: "false" }, "prop", Box.disabled);
 
         expect(result).toEqual(errorMsg);
     });
