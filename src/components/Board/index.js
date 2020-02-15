@@ -16,7 +16,9 @@ class Board extends Component {
         const totalBoxes = AppConst.TOTAL_BOXES;
         let boxList = []
         for (let i = 0; i < totalBoxes; i++) {
-            boxList.push(<li key={i}><Box onClick={this.fillTheBox.bind(this, i)} value={this.getFilledValue(i)} disabled={this.isBoxDisabled(i)}/></li>);
+            boxList.push(<li key={i}>
+                <Box onClick={this.fillTheBox.bind(this, i)} value={this.getFilledValue(i)} disabled={this.isBoxDisabled(i)}/>
+            </li>);
         }
         return boxList;
     }
@@ -31,11 +33,38 @@ class Board extends Component {
         this.setState(() => ({
             filledBoxes: filledBoxes
         }));
+        this.isGameFinished();
         this.props.changeActivePlayer();    
     }
 
     isBoxDisabled = (boxIndex) => {
         return this.state.filledBoxes[boxIndex] ? true : false;
+    }
+
+    isGameFinished = () => {
+        if( this.isAnyRowCompletedByTheActivePlayer()) {
+            this.props.setTheWinner();
+        }
+    }
+
+    isAnyRowCompletedByTheActivePlayer = () => {
+        let rowsList = AppConst.ROW_START_INDEXES;
+        let numOfRows = AppConst.TOTAL_ROWS;
+        let isPlayerWin = false;
+        for(var row = 0; row < numOfRows; row++) {
+            let rowStartIndex = rowsList[row];
+            if(this.isRowCompletedByTheActivePlayer(rowStartIndex)){
+                isPlayerWin = true;
+                break;
+            } 
+        }
+        return isPlayerWin;
+    }
+
+    isRowCompletedByTheActivePlayer = (rowStartIndex) => {
+        const activePlayer = this.props.activePlayer;
+        const filledBoxes = this.state.filledBoxes;
+        return filledBoxes[rowStartIndex] === activePlayer && filledBoxes[rowStartIndex+1] === activePlayer && filledBoxes[rowStartIndex+2] === activePlayer;
     }
     
     render = () => {
@@ -47,7 +76,8 @@ class Board extends Component {
 
 Board.propTypes = {
     activePlayer: PropTypes.string.isRequired,
-    changeActivePlayer: PropTypes.func.isRequired
+    changeActivePlayer: PropTypes.func.isRequired,
+    setTheWinner: PropTypes.func.isRequired
 };
 
 export default Board;

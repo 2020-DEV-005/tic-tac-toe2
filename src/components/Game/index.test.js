@@ -29,4 +29,24 @@ describe("<Game/> component", () => {
         expect(board.props().changeActivePlayer).toBeInstanceOf(Function);
     });
 
+    it("Should send the prop 'setTheWinner' of type function", () => {
+        expect(board.props().setTheWinner).toBeInstanceOf(Function);
+    });
+
+    it("Should display the winner message", () => {
+        const btnList = wrapper.find("ul li button");
+        const box1 = btnList.at(1);
+        const box2 = btnList.at(2);
+        const box3 = btnList.at(3);
+        const box4 = btnList.at(4);
+        const box5 = btnList.at(5);
+    
+        box3.simulate("click");
+        box1.simulate("click");    
+        box4.simulate("click");
+        box2.simulate("click");
+        box5.simulate("click");
+        
+        expect(wrapper.find(".win-msg").text()).toEqual(AppConst.PLAYER + " " + AppConst.PLAYER_X_NAME + " " +AppConst.WIN_THE_GAME);
+      });
 });

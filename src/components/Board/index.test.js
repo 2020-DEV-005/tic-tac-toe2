@@ -17,7 +17,8 @@ describe("<Board /> component", () => {
     beforeEach(() => {
         const props = {
             activePlayer: AppConst.PLAYER_X_NAME,
-            changeActivePlayer: jest.fn(changeActivePlayerMock)
+            changeActivePlayer: jest.fn(changeActivePlayerMock),
+            setTheWinner: jest.fn()
         };
 
         wrapper = mount(<Board {...props}/>);
@@ -124,5 +125,54 @@ describe("<Board /> component", () => {
         btn.simulate("click");
     
         expect(btn.is('[disabled]')).toBe(true);
-      });
+    });
+
+    it("Should call isAnyRowCompletedByTheActivePlayer", () => {
+        const spy = jest.spyOn(instance, "isAnyRowCompletedByTheActivePlayer");
+        instance.forceUpdate();
+
+        const btn = wrapper.find("ul li button").at(0);
+
+        btn.simulate("click");
+
+        expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should call isRowCompletedByTheActivePlayer 3 times", () => {
+        const spy = jest.spyOn(instance, "isRowCompletedByTheActivePlayer");
+        instance.forceUpdate();
+
+        const btn = wrapper.find("ul li button").at(0);
+
+        btn.simulate("click");
+
+        expect(spy).toHaveBeenCalledTimes(AppConst.TOTAL_ROWS);
+    });
+
+    it("Should call the setTheWinner method when a row completed by the player", () => {
+        const btnList = wrapper.find("ul li button");
+        const box1 = btnList.at(1);
+        const box2 = btnList.at(2);
+        const box3 = btnList.at(3);
+        const box4 = btnList.at(4);
+        const box5 = btnList.at(5);
+    
+        box3.simulate("click");
+        expect(wrapper.state().filledBoxes[3]).toEqual(AppConst.PLAYER_X_NAME);
+    
+        box1.simulate("click");    
+        expect(wrapper.state().filledBoxes[1]).toEqual(AppConst.PLAYER_O_NAME);
+    
+        box4.simulate("click");
+        expect(wrapper.state().filledBoxes[4]).toEqual(AppConst.PLAYER_X_NAME);
+    
+        box2.simulate("click");
+        expect(wrapper.state().filledBoxes[2]).toEqual(AppConst.PLAYER_O_NAME);
+    
+        box5.simulate("click");
+        expect(wrapper.state().filledBoxes[5]).toEqual(AppConst.PLAYER_X_NAME);
+    
+        expect(wrapper.props().setTheWinner).toHaveBeenCalled();
+    });
+
 });
